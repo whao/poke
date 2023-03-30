@@ -1,13 +1,15 @@
+package duke.task;
+
 import java.util.ArrayList;
 
-public class ToDoList {
+public class Task {
     private boolean isEmpty;
     private int length;
-    private final ArrayList<String> toDoList;
-    public ToDoList() {
+    private final ArrayList<String> tasks;
+    public Task() {
         this.isEmpty = true;
         this.length = 0;
-        toDoList = new ArrayList<>();
+        tasks = new ArrayList<>();
     }
     public int getLength() {
         return this.length;
@@ -16,11 +18,11 @@ public class ToDoList {
         return this.isEmpty;
     }
     public void add(String item) {
-        this.toDoList.add(item);
+        this.tasks.add(item);
         this.length++;
         this.isEmpty = false;
     }
     public String get(int index) {
-        return this.toDoList.get(index);
+        return this.tasks.get(index);
     }
 }
