@@ -1,28 +1,28 @@
 package duke.task;
 
-import java.util.ArrayList;
-
 public class Task {
-    private boolean isEmpty;
-    private int length;
-    private final ArrayList<String> tasks;
-    public Task() {
-        this.isEmpty = true;
-        this.length = 0;
-        tasks = new ArrayList<>();
+    private final String description;
+    private boolean isDone;
+
+    public Task(String description) {
+        this.description = description;
+        this.isDone = false;
     }
-    public int getLength() {
-        return this.length;
+
+    public String getStatusIcon() {
+        return (isDone ? "X" : " "); // mark done task with X
     }
-    public boolean isEmpty() {
-        return this.isEmpty;
+
+    public void markAsDone() {
+        this.isDone = true;
     }
-    public void add(String item) {
-        this.tasks.add(item);
-        this.length++;
-        this.isEmpty = false;
+
+    public String getDescription() {
+        return this.description;
     }
-    public String get(int index) {
-        return this.tasks.get(index);
+
+    @Override
+    public String toString() {
+        return "[" + this.getStatusIcon() + "] " + this.getDescription();
     }
 }

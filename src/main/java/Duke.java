@@ -1,32 +1,48 @@
-import duke.task.Task;
-import duke.ui.UI;
-import java.util.Scanner;
+import duke.duke.exceptions.DukeException;
+import duke.task.TaskList;
+import duke.ui.Ui;
+import duke.command.Command;
+import duke.util.Storage;
+import duke.util.Parser;
+
+import java.sql.SQLException;
+
 public class Duke {
-    public static void main(String[] args) {
-        String logo = " ____        _        \n"
-                + "|  _ \\ _   _| | _____ \n"
-                + "| | | | | | | |/ / _ \\\n"
-                + "| |_| | |_| |   <  __/\n"
-                + "|____/ \\__,_|_|\\_\\___|\n";
-        System.out.println("Hello from\n" + logo);
-        UI.printWelcomeMessage();
-        boolean isRunning = true;
-        String userInput;
-        Task tasks = new Task();
-        while (isRunning) {
-            userInput = new Scanner(System.in).nextLine();
-            switch (userInput.toLowerCase()) {
-                case "bye":
-                    isRunning = false;
-                    break;
-                case "list":
-                    UI.printList(tasks);
-                    break;
-                default:
-                    UI.printAddMessage(tasks, userInput);
-                    break;
+
+    private Storage storage;
+    private TaskList tasks;
+    private Ui ui;
+
+    public Duke(String filePath) {
+        ui = new Ui();
+        storage = new Storage(filePath);
+        try {
+            tasks = storage.load();
+        } catch (SQLException e) {
+            ui.showLoadingError();
+            tasks = new TaskList();
+        }
+    }
+
+    public void run() {
+        ui.showWelcome();
+        boolean isExit = false;
+        while (!isExit) {
+            try {
+                String fullCommand = ui.readCommand();
+                ui.showLine(); // show the divider line ("_______")
+                Command c = Parser.parse(fullCommand);
+                c.execute(tasks, ui, storage);
+                isExit = c.isExit();
+            } catch (DukeException e) {
+                ui.showError(e.getMessage());
+            } finally {
+                ui.showLine();
             }
         }
-        UI.printByeMessage();
+    }
+
+    public static void main(String[] args) {
+        new Duke("data/tasks.sql").run();
     }
 }
