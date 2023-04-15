@@ -7,12 +7,15 @@ public class Ui {
     public Ui() {
     }
     public String showWelcome() {
-        return " ____        _        \n"
-                + "|  _ \\ _   _| | _____ \n"
-                + "| | | | | | | |/ / _ \\\n"
-                + "| |_| | |_| |   <  __/\n"
-                + "|____/ \\__,_|_|\\_\\___|\n"
-                + "Hello! I'm Duke\n"
+        return " ____________________ \n" +
+                "< It's all good man. >\n" +
+                " -------------------- \n" +
+                "        \\   ^__^\n" +
+                "         \\  (oo)\\_______\n" +
+                "            (__)\\       )\\/\\\n" +
+                "                ||----w |\n" +
+                "                ||     ||\n"
+                + "Hello! I'm Saul Goodman\n"
                 + "What can I do for you?";
     }
     public String showBye() {
