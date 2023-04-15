@@ -1,6 +1,6 @@
 package duke.task;
 
-public class Task {
+public abstract class Task {
     private final String description;
     private boolean isDone;
 
@@ -17,6 +17,10 @@ public class Task {
         this.isDone = true;
     }
 
+    public void markAsUndone() {
+        this.isDone = false;
+    }
+
     public String getDescription() {
         return this.description;
     }
@@ -24,5 +28,13 @@ public class Task {
     @Override
     public String toString() {
         return "[" + this.getStatusIcon() + "] " + this.getDescription();
+    }
+
+    public abstract String getTaskType();
+
+    public abstract String getTaskStartTime();
+    public abstract String getTaskEndTime();
+    public String getTaskStatusInString() {
+        return this.isDone ? "1" : "0";
     }
 }

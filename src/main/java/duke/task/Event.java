@@ -1,14 +1,24 @@
 package duke.task;
 
 public class Event extends Task{
-    private final String at;
-    public Event(String description, String at) {
+    private final String start_time;
+    private final String end_time;
+    public Event(String description, String start_time, String end_time) {
         super(description);
-        this.at = at;
+        this.start_time = start_time;
+        this.end_time = end_time;
     }
 
-    @Override
     public String toString() {
-        return "[E]" + super.toString() + " (at: " + this.at + ")";
+        return "[E]" + super.toString() + " (From: " + this.start_time + " to " + this.end_time + ")";
+    }
+    public String getTaskType() {
+        return "E";
+    }
+    public String getTaskStartTime() {
+        return this.start_time;
+    }
+    public String getTaskEndTime() {
+        return this.end_time;
     }
 }

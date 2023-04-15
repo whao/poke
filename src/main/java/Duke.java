@@ -1,48 +1,46 @@
-import duke.duke.exceptions.DukeException;
-import duke.task.TaskList;
+import duke.exceptions.DukeException;
+import duke.util.TaskList;
 import duke.ui.Ui;
 import duke.command.Command;
 import duke.util.Storage;
 import duke.util.Parser;
 
-import java.sql.SQLException;
-
 public class Duke {
 
-    private Storage storage;
+    private final Storage storage;
     private TaskList tasks;
-    private Ui ui;
+    private final Ui ui;
 
     public Duke(String filePath) {
         ui = new Ui();
         storage = new Storage(filePath);
         try {
             tasks = storage.load();
-        } catch (SQLException e) {
-            ui.showLoadingError();
+        } catch (DukeException e) {
+            System.out.println(ui.showLoadingError());;
             tasks = new TaskList();
         }
     }
 
     public void run() {
-        ui.showWelcome();
+        System.out.println(ui.showWelcome());
         boolean isExit = false;
         while (!isExit) {
             try {
                 String fullCommand = ui.readCommand();
-                ui.showLine(); // show the divider line ("_______")
+                System.out.println(ui.showLine()); // show the divider line ("_______")
                 Command c = Parser.parse(fullCommand);
                 c.execute(tasks, ui, storage);
                 isExit = c.isExit();
             } catch (DukeException e) {
-                ui.showError(e.getMessage());
+                System.out.println(ui.showError(e.getMessage()));
             } finally {
-                ui.showLine();
+                System.out.println(ui.showLine());
             }
         }
     }
 
     public static void main(String[] args) {
-        new Duke("data/tasks.sql").run();
+        new Duke("data/data.sql").run();
     }
 }

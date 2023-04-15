@@ -9,4 +9,13 @@ public class Todo extends Task{
     public String toString() {
         return "[T]" + super.toString();
     }
+    public String getTaskType() {
+        return "T";
+    }
+    public String getTaskStartTime() {
+        return "";
+    }
+    public String getTaskEndTime() {
+        return "";
+    }
 }

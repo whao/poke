@@ -1,7 +1,7 @@
 package duke.util;
 
 import duke.command.Command;
-
+import duke.exceptions.DukeException;
 public class Parser {
     /**
      * Parses the user input and returns the corresponding command.
@@ -9,27 +9,66 @@ public class Parser {
      * @param fullCommand The user input.
      * @return The corresponding command.
      */
-    public static Command parse(String fullCommand) {
+    public static Command parse(String fullCommand) throws DukeException {
         String[] command = fullCommand.split(" ", 2);
         switch (command[0]) {
-        case "bye":
-            return new Command("bye");
-        case "list":
-            return new Command("list");
-        case "done":
-            return new Command("done", command[1]);
-        case "delete":
-            return new Command("delete", command[1]);
-        case "todo":
-            return new Command("todo", command[1]);
-        case "deadline":
-            return new Command("deadline", command[1]);
-        case "event":
-            return new Command("event", command[1]);
-        case "find":
-            return new Command("find", command[1]);
-        default:
-            return new Command("invalid");
+            case "help":
+                return new Command(Command.CommandType.HELP);
+            case "bye":
+                return new Command(Command.CommandType.BYE);
+            case "list":
+                return new Command(Command.CommandType.LIST);
+            case "done":
+                try {
+                    return new Command(Command.CommandType.DONE, Integer.parseInt(command[1]));
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    throw new DukeException("☹ OOPS!!! You need to specify which task to mark as done.");
+                } catch (NumberFormatException e) {
+                    throw new DukeException("☹ OOPS!!! Index must be a integer number.");
+                }
+            case "undone":
+                try {
+                    return new Command(Command.CommandType.UNDONE, Integer.parseInt(command[1]));
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    throw new DukeException("☹ OOPS!!! You need to specify which task to mark as undone.");
+                } catch (NumberFormatException e) {
+                    throw new DukeException("☹ OOPS!!! Index must be a integer number.");
+                }
+            case "delete":
+                try {
+                    return new Command(Command.CommandType.DELETE, Integer.parseInt(command[1]));
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    throw new DukeException("☹ OOPS!!! You need to specify which task to delete.");
+                } catch (NumberFormatException e) {
+                    throw new DukeException("☹ OOPS!!! Index must be a integer number.");
+                }
+            case "todo":
+                try {
+                    return new Command(Command.CommandType.TODO, command[1]);
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    throw new DukeException("☹ OOPS!!! The description of a todo cannot be empty.");
+                }
+            case "deadline":
+                try {
+                    String deadlineDescription = command[1].split(" /by ", 2)[0];
+                    String deadlineTime = command[1].split(" /by ", 2)[1];
+                    return new Command(Command.CommandType.DEADLINE, deadlineDescription, deadlineTime);
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    throw new DukeException("☹ OOPS!!! The description and time of a deadline cannot be empty.");
+                }
+            case "event":
+                try {
+                    String eventDescription = command[1].split(" /from ", 2)[0];
+                    String eventStartTime = command[1].split(" /from ", 2)[1].split(" /to ", 2)[0];
+                    String eventEndTime = command[1].split(" /from ", 2)[1].split(" /to ", 2)[1];
+                    return new Command(Command.CommandType.EVENT, eventDescription, eventStartTime, eventEndTime);
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    throw new DukeException("☹ OOPS!!! The description, start time and end time of an event cannot be empty.");
+                }
+            case "find":
+                return new Command(Command.CommandType.FIND, command[1]);
+            default:
+                throw new DukeException("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
         }
     }
 }

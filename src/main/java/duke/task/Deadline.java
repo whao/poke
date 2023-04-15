@@ -11,4 +11,13 @@ public class Deadline extends Task{
     public String toString() {
         return "[D]" + super.toString() + " (by: " + this.by + ")";
     }
+    public String getTaskType() {
+        return "D";
+    }
+    public String getTaskStartTime() {
+        return "";
+    }
+    public String getTaskEndTime() {
+        return this.by;
+    }
 }
